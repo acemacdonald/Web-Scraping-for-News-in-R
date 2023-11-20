@@ -1,0 +1,65 @@
+library(urltools)
+library(httr)
+library(robotstxt)
+library(rvest)
+library(stringr)
+library(dplyr)
+library(tibble)
+
+### Writing functions to pull data
+
+fun_parse <- function(xpath, xmldoc = page.i) {
+  x <- xmldoc %>% 
+    html_nodes(xpath = xpath) %>%
+    html_text(trim = TRUE)
+  if (length(x) == 0 & xpath == '//*[@id="Col1-0-Sustainability-Proxy"]/section/div[2]/div[2]/div[2]/div/div[2]/div[1]/span/span/span') {
+    return("None")
+  }
+  if (grepl("% AUM", x)) {
+    return(as.numeric(sub("% AUM", "", sub("based on ", "", x))) / 100)
+  }
+  if (!grepl("\\d", x)) {
+    return(trimws(x))
+  } else {
+    if (grepl("percentile", x)) {
+      return(x %>% str_replace_all("[^0-9\\.]", "") %>% as.numeric() / 100)
+    } else {
+      if (grepl("updated on", x)) {
+        r <- sub("Last updated on ", "", x)
+        r <- paste(unlist(strsplit(r, "/"))[2], unlist(strsplit(r, "/"))[1], sep = "-")
+        return(anytime::anydate(r))
+      } else {
+        return(as.numeric(x))
+      }
+    }
+  }
+}
+
+fun_lists <- function() {
+  x <- page.i %>%
+    html_nodes(xpath = '//*[@id="Col2-3-InvolvementAreas-Proxy"]/section/table') %>%
+    html_table() %>%
+    data.frame()
+  n <- sum(grepl("Yes", x[, 2]))
+  if (n == 0) return(NA)
+  if (n == 1) return(x[grep("Yes", x[, 2]), 1])
+  if (n >= 2) return(list(x[grep("Yes", x[, 2]), 1]))
+}
+
+
+fun_robots <- function(url = link.i) {
+  base_url <- paste0(url_parse(url)$scheme, "://", domain(url))
+  paths_allowed(
+    paths = sub(base_url, "", link.i), 
+    domain = domain(url), 
+    bot = "*"
+  )
+}
+
+## Step 1c: Write User Agent
+
+httr:::default_ua()
+
+
+
+
