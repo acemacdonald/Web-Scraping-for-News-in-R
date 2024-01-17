@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.secret
+.key.json
+Rough Work/
+SendingMail.R
+cron_file.R

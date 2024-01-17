@@ -8,6 +8,13 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r config, include=FALSE}
+dir_root <- getwd()
+
+# Load packages
+load_packages <- paste(dir_root,"/FinalScripts/load_packages_webscrape.R", sep = "")
+source(load_packages)
+```
 
 ## R Markdown
 
@@ -48,3 +55,11 @@ data <- data.frame(Title = first_10_titles, Link = first_10_links)
 kable(data, caption = "Latest News from ESG News")
 ```
 
+## Latest Share Prices
+
+The latest share price for Apple can be seen below:
+
+```{r testfunction, echo=FALSE}
+my_data <- fetch_shareprice("AAPL")
+kable(my_data, caption = "Latest Share Price of Apple")
+```

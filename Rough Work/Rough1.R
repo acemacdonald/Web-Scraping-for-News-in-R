@@ -1,5 +1,5 @@
 ## Install and Load Packages
-
+library(rvest)
 
 ## We will be using the tutorials news sites for now
 
@@ -49,4 +49,6 @@ markdown_table <- kable(data, format = "markdown")
 # Print the RMarkdown table
 cat(markdown_table)
 
-
+getwd()
+setwd('/folder/where/the/file/is/')
+> source('file_name')`
