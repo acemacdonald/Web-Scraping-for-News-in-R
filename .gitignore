@@ -3,7 +3,7 @@
 .RData
 .Ruserdata
 .secret
-.key.json
+key.json
 Rough Work/
 SendingMail.R
 cron_file.R
