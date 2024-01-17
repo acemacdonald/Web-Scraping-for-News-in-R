@@ -12,3 +12,4 @@ One can go one step further and email the newsletter but that goes slightly beyo
 There are 3 parts to to this, and these need to be generated in the following order:
 - 1. The newsletter. This is created by running an RMarkdown file. This file, names "Newsletter.Rmd" pulls data by using API which pull stock data as well as scrape the web for news articles.
 - 2. The render function, which takes the script and runs it. 
+- 3. The cron file, which helps you automate the render file at specific times
